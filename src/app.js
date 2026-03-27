@@ -1,5 +1,6 @@
-const express = require('express');
-const { errorHandler } = require('./auth.middleware');
+import express from 'express';
+import errorHandler from './auth.middleware.js';
+
 const app = express();
 
 app.use(express.json());

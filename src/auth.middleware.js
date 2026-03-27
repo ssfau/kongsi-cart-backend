@@ -1,5 +1,4 @@
-const { AppError } = require('../utils');
-
+import AppError from './utils/appError.js';
 // authentication
 const demoAuth = (req, res, next) => {
   const role = req.headers['x-demo-role'];
@@ -46,4 +45,4 @@ const errorHandler = (err, req, res, next) => {
   });
 };
 
-module.exports = { demoAuth, roleGuard, validateObjectId, errorHandler };
+export default { demoAuth, roleGuard, validateObjectId, errorHandler };

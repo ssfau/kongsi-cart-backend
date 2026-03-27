@@ -1,4 +1,5 @@
-const app = require('./src/app');
+import app from './src/app.js';
+
 const connectDB = require('./src/config/db');
 require('./src/config/env');
 

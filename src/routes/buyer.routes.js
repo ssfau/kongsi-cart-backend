@@ -1,7 +1,9 @@
-const router = require('express').Router();
-const { demoAuth, roleGuard } = require('../middleware/auth');
+import { Router } from 'express';
+import { demoAuth, roleGuard } from '../auth.middleware';
 const { catchAsync } = require('../utils');
 const ctrl = require('../controllers/buyer.controller');
+
+const router = Router();
 
 router.use([demoAuth, roleGuard('customer')]);
 

@@ -1,5 +1,6 @@
-const router = require('express').Router();
+import express from 'express';
 
-
-
-module.exports = router
+const router = express.Router();
+const { demoAuth, roleGuard } = require('../middleware/auth');
+const { catchAsync } = require('../utils');
+const ctrl = require('../controllers/auth.controller'); 
