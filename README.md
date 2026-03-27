@@ -4,7 +4,7 @@ awesome readme powered by claude and ammar
 
 - Clone the repo
 - Run `npm install`
-- Copy `.env.example` to `.env` and fill in `MONGO_URI` and `PORT`
+- Copy `.env.example` to `.env` and fill in `MONGO_URI` and `PORT` (REFER IN WS GROUP PINNED MESSAGE)
 - Get the MongoDB Atlas connection string
 - Run `npm run dev` to start the server
 
