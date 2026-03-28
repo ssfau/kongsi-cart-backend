@@ -1,4 +1,6 @@
-import AppError from './utils/appError.js';
+import { AppError } from './utils.js';
+import mongoose from 'mongoose';
+
 // authentication
 const demoAuth = (req, res, next) => {
   const role = req.headers['x-demo-role'];
@@ -25,7 +27,6 @@ const roleGuard = (...allowedRoles) => (req, res, next) => {
 };
 
 // objectid validator mongodb
-const mongoose = require('mongoose');
 
 const validateObjectId = (req, res, next) => {
   if (req.params.id && !mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -45,4 +46,4 @@ const errorHandler = (err, req, res, next) => {
   });
 };
 
-export default { demoAuth, roleGuard, validateObjectId, errorHandler };
+export { demoAuth, roleGuard, validateObjectId, errorHandler };

@@ -1,6 +1,8 @@
-import express from 'express';
+import express from "express";
+import * as ctrl from "../controllers/auth.controller.js";
 
 const router = express.Router();
-const { demoAuth, roleGuard } = require('../middleware/auth');
-const { catchAsync } = require('../utils');
-const ctrl = require('../controllers/auth.controller'); 
+
+router.post("/register", ctrl.register);
+
+export default router;
