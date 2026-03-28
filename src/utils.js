@@ -1,5 +1,5 @@
 // error printer without suspending program
-class AppError extends Error {
+export class AppError extends Error {
   constructor(message, statusCode) {
     super(message);
     this.statusCode = statusCode;
@@ -7,8 +7,6 @@ class AppError extends Error {
 }
 
 // async wrapper
-const catchAsync = (fn) => (req, res, next) => {
+export const catchAsync = (fn) => (req, res, next) => {
   fn(req, res, next).catch(next);
 };
-
-module.exports = { AppError, catchAsync };

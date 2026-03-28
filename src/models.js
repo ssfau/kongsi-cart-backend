@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 // 3.1 users
@@ -75,11 +75,9 @@ const paymentSchema = new Schema({
 }, { timestamps: true });
 
 
-const User            = mongoose.model('User', userSchema);
-const CollectionPoint = mongoose.model('CollectionPoint', collectionPointSchema);
-const Listing         = mongoose.model('Listing', listingSchema);
-const Order           = mongoose.model('Order', orderSchema);
-const Shipment        = mongoose.model('Shipment', shipmentSchema);
-const Payment         = mongoose.model('Payment', paymentSchema);
-
-module.exports = {User, CollectionPoint, Listing, Order, Shipment, Payment};
+export const User            = mongoose.model('User', userSchema);
+export const CollectionPoint = mongoose.model('CollectionPoint', collectionPointSchema);
+export const Listing         = mongoose.model('Listing', listingSchema);
+export const Order           = mongoose.model('Order', orderSchema);
+export const Shipment        = mongoose.model('Shipment', shipmentSchema);
+export const Payment         = mongoose.model('Payment', paymentSchema);

@@ -1,16 +1,16 @@
 import express from 'express';
-import errorHandler from './auth.middleware.js';
+import cors from 'cors';
+import { errorHandler } from './auth.middleware.js';
+import authRoutes from './routes/auth.routes.js';
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 // routes
-app.use('/api/v1',    require('./routes/auth.routes'));
-app.use('/api/v1',   require('./routes/buyer.routes'));
-app.use('/api/v1', require('./routes/handler.routes'));
-app.use('/api/v1',  require('./routes/shared.routes'));
+app.use('/api/v1/auth', authRoutes);
 
 app.use(errorHandler);
 
-module.exports = app;
+export default app;
