@@ -1,46 +1,41 @@
-import { Router } from 'express';
-import { demoAuth, roleGuard } from '../auth.middleware';
-const { catchAsync } = require('../utils');
-const ctrl = require('../controllers/buyer.controller');
+import { Router } from "express";
+import { demoAuth, roleGuard } from "../auth.middleware.js";
+import { catchAsync } from "../utils/index.js";
 
 const router = Router();
 
-router.use([demoAuth, roleGuard('customer')]);
+router.use([demoAuth, roleGuard("customer")]);
 
-// replace html parameter with catchasync when controller done
 // BUYER ROUTER LOGIC:
 
 /// 5.4 ORDERS
-router.route('/orders')
-    //// place an order
-    .post('/', (req,res) => {
-        
-    })
 
-    //// cancel order
-    .patch('/:id/cancel', (req,res) => {
-        const listingId = req.params.id;
+// place an order
+router.post("/orders", (req, res) => {
 
-    })
+});
 
-    //// trigger remaining balance payment
-    .patch('/:id/payment-remaining', (req,res) => {
-        const listingId = req.params.id;
+// cancel order
+router.patch("/orders/:id/cancel", (req, res) => {
+  const orderId = req.params.id;
+});
 
-    })
-;
+// trigger remaining balance payment
+router.patch("/orders/:id/payment-remaining", (req, res) => {
+  const orderId = req.params.id;
+});
+
 
 /// 5.7 PAYMENT (placeholders)
-router.route('/payments')
-    //// simulates deposit payment
-    .post('/deposit', (req,res) => {
-        
-    })
 
-    //// simulates remaining balance payment
-    .post('/remaining', (req,res) => {
-        
-    })
-;
+// deposit payment
+router.post("/payments/deposit", (req, res) => {
 
-module.exports = router;
+});
+
+// remaining payment
+router.post("/payments/remaining", (req, res) => {
+
+});
+
+export default router;

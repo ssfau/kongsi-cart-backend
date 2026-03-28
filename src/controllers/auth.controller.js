@@ -45,3 +45,44 @@ export const register = async (req, res, next) => {
     next(error);
   }
 };
+
+export const login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ success: false, error: "Please provide email and password" });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ success: false, error: "Invalid credentials" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.passwordHash);
+    if (!isMatch) {
+      return res.status(401).json({ success: false, error: "Invalid credentials" });
+    }
+
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET || "fallback_secret",
+      { expiresIn: "1d" }
+    );
+
+    res.status(200).json({
+      success: true,
+      data: {
+        token,
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role
+        }
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
