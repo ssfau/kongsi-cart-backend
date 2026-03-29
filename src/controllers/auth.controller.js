@@ -48,7 +48,7 @@ export const register = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, role: requestedRole } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({ success: false, error: "Please provide email and password" });
@@ -62,6 +62,10 @@ export const login = async (req, res, next) => {
     const isMatch = await bcrypt.compare(password, user.passwordHash);
     if (!isMatch) {
       return res.status(401).json({ success: false, error: "Invalid credentials" });
+    }
+
+    if (requestedRole && user.role !== requestedRole) {
+      return res.status(403).json({ success: false, error: "Access denied. Invalid role for this portal." });
     }
 
     const token = jwt.sign(
