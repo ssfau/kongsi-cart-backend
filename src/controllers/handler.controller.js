@@ -2,7 +2,7 @@ import { Listing, User } from "../models.js";
 import mongoose from "mongoose";
 
 export const createListing = async (req, res) => {
-  try {
+    try {
     let userId = req.user?.id;
     const { category, itemName, unit, estimatedQty, depositPerUnit, estimatedPriceMin, estimatedPriceMax, deadline } = req.body;
 
@@ -122,4 +122,4 @@ export const deleteListing = async (req, res) => {
     console.error('Error deleting listing:', error);
     res.status(500).json({ status: 'error', error: error.message });
   }
-};
+}
