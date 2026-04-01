@@ -24,8 +24,8 @@ const listingSchema = new Schema({
   estimatedPriceMax: { type: Number, required: true },
   deadline:          { type: Date, required: true },
   status:            { type: String, enum: ['active', 'closed', 'shipped', 'settled', 'cancelled'], default: 'active' },
-  collectionPoints:  [{ type: Schema.Types.ObjectId, ref: 'CollectionPoint' }],
-  imageUrl:          { type: String },
+  collectionPoints:  [{ type: Schema.Types.ObjectId, ref: 'CollectionPoint' }],  state:             { type: String }, // NEW: Added state
+  district:          { type: String }, // NEW: Added district  imageUrl:          { type: String },
 }, { timestamps: true });
 
 // 3.3 collection points
