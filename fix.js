@@ -1,33 +1,19 @@
-import { Listing, User } from "../models.js";
+import fs from 'fs';
+const content = `import { Listing, User } from "../models.js";
 import mongoose from "mongoose";
 
 export const createListing = async (req, res) => {
   try {
-    let userId = req.user?.id;
+    const userId = req.user?.id;
     const { category, itemName, unit, estimatedQty, depositPerUnit, estimatedPriceMin, estimatedPriceMax, deadline } = req.body;
 
     if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
-      // Auto-fallback for demo purposes
-      console.log("Invalid ID provided, falling back to default handler.");
-      const defaultHandler = await User.findOne({ role: 'handler' });
-      if (defaultHandler) {
-        userId = defaultHandler._id;
-      } else {
-        return res.status(401).json({ status: 'error', error: 'Unauthorized: Invalid user ID format. Please log in again.' });
-      }
+      return res.status(401).json({ status: 'error', error: 'Unauthorized: Invalid user ID format. Please log in again.' });
     }
 
-    let sellerUser = await User.findById(userId);
+    const sellerUser = await User.findById(userId);
     if (!sellerUser) {
-      // Auto-fallback for demo purposes if account is missing
-      console.log("Seller not found by ID, falling back to default handler.");
-      const fallbackSeller = await User.findOne({ role: 'handler' });
-      if (fallbackSeller) {
-        sellerUser = fallbackSeller;
-        userId = fallbackSeller._id;
-      } else {
-        return res.status(401).json({ status: 'error', error: 'Unauthorized: Seller account not found (Create): ' + userId });
-      }
+      return res.status(401).json({ status: 'error', error: 'Unauthorized: Seller account not found.' });
     }
 
     const generatedCompanyName = sellerUser.name;
@@ -57,28 +43,15 @@ export const createListing = async (req, res) => {
 
 export const getMyListings = async (req, res) => {
   try {
-    let userId = req.user?.id;
+    const userId = req.user?.id;
 
     if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
-      console.log("Invalid ID provided in getMyListings, falling back.");
-      const defaultHandler = await User.findOne({ role: 'handler' });
-      if (defaultHandler) {
-        userId = defaultHandler._id;
-      } else {
-        return res.status(401).json({ status: 'error', error: 'Unauthorized: Invalid user ID format.' });
-      }
+      return res.status(401).json({ status: 'error', error: 'Unauthorized: Invalid user ID format.' });
     }
 
-    let sellerUser = await User.findById(userId);
+    const sellerUser = await User.findById(userId);
     if (!sellerUser) {
-      console.log("Seller not found in getMyListings, falling back.");
-      const fallbackSeller = await User.findOne({ role: 'handler' });
-      if (fallbackSeller) {
-        sellerUser = fallbackSeller;
-        userId = fallbackSeller._id;
-      } else {
-        return res.status(401).json({ status: 'error', error: 'Unauthorized: Seller account not found (Get): ' + userId });
-      }
+      return res.status(401).json({ status: 'error', error: 'Unauthorized: Seller account not found.' });
     }
 
     const listings = await Listing.find({ supplierId: userId, status: { $ne: 'cancelled' } })
@@ -123,3 +96,5 @@ export const deleteListing = async (req, res) => {
     res.status(500).json({ status: 'error', error: error.message });
   }
 };
+`;
+fs.writeFileSync('D:/Hackathon/Putrahack/kongsi-cart-backend/src/controllers/handler.controller.js', content, 'utf8');

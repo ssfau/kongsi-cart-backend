@@ -11,8 +11,19 @@ const router = Router();
 
 // get all listings
 router.get("/listings", demoAuth, catchAsync(async (req, res) => {
-  const listings = await Listing.find({ status: 'active' });
-  res.status(200).json({ status: 'success', data: listings });
+  const listings = await Listing.find({ status: 'active' }).populate('supplierId', 'name');
+  
+  // Format the output to strictly enforce the seller's literal name from the populated user object
+  const formattedListings = listings.map(l => {
+    const listingObj = l.toObject();
+    // Overwrite the companyName directly with the user's name if the supplier is valid
+    if (listingObj.supplierId && listingObj.supplierId.name) {
+      listingObj.companyName = listingObj.supplierId.name;
+    }
+    return listingObj;
+  });
+
+  res.status(200).json({ status: 'success', data: formattedListings });
 }));
 
 // get specific listing
