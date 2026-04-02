@@ -10,7 +10,7 @@ const router = Router();
 /// 5.2 LISTINGS
 
 // get all listings
-router.get("/listings", demoAuth, catchAsync(async (req, res) => {
+router.get("/listings", catchAsync(async (req, res) => {
   const listings = await Listing.find({ status: 'active' }).populate('supplierId', 'name');
   
   // Format the output to strictly enforce the seller's literal name from the populated user object
@@ -27,7 +27,7 @@ router.get("/listings", demoAuth, catchAsync(async (req, res) => {
 }));
 
 // get specific listing
-router.get("/listings/:id", demoAuth, (req, res) => {
+router.get("/listings/:id", (req, res) => {
   const listingId = req.params.id;
 });
 
