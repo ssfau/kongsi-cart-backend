@@ -16,7 +16,7 @@ export const createListing = async (req, res) => {
         return res.status(401).json({ status: 'error', error: 'Unauthorized: Invalid user ID format. Please log in again.' });
       }
     }
-
+      
     let sellerUser = await User.findById(userId);
     if (!sellerUser) {
       // Auto-fallback for demo purposes if account is missing
