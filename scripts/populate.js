@@ -25,11 +25,11 @@ import {
   MALAYSIA_STATE_DISTRICTS,
 } from '../src/constants/listing-options.js';
 
-const POPULATE_PASSWORD = process.env.POPULATE_PASSWORD || 'changeme-populate';
+const POPULATE_PASSWORD = process.env.POPULATE_PASSWORD;
 
 const POPULATOR_HANDLER = {
-  name: 'Populator Handler',
-  email: 'populator.handler@local.test',
+  name: 'Pak Abu Fresh Farm',
+  email: 'handler@gmail.com',
   role: 'handler',
 };
 
@@ -52,6 +52,8 @@ function pickNameCategoryPair(district) {
   }
   return { itemName: `Sample Item (${district})`, category: 'Other' };
 }
+
+
 
 async function ensureUser({ name, email, role, passwordHash }) {
   const existing = await User.findOne({ email });
