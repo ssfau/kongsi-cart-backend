@@ -22,7 +22,7 @@ export const getMyOrders = async (req, res) => {
 
   // Find orders where buyerId = req.user.id
   const orders = await Order.find({ buyerId: userId })
-    .populate('listingId', 'itemName imageUrl')
+    .populate('listingId', 'itemName imageUrl state district')
     .populate('collectionPointId', 'name address')
     .populate('buyerId', 'phone')
     .lean();
@@ -41,8 +41,8 @@ export const getMyOrders = async (req, res) => {
       const amountLeftNum = order.remainingAmount || 0;
 
       // Extract details assuming schema has state/district in address or just placeholder
-      const state = "Selangor"; // placeholder if not in schema
-      const district = "Serdang"; // placeholder if not in schema
+      const state = order.listingId?.state || "Selangor"; 
+      const district = order.listingId?.district || "Serdang"; 
 
       return {
         id: order._id.toString(),
@@ -54,7 +54,7 @@ export const getMyOrders = async (req, res) => {
         amountLeft: amountLeftNum ? `RM ${amountLeftNum.toFixed(2)}` : "-",
         state: state,
         district: district,
-        collectionPoint: order.collectionPointId?.name || "Unknown Point",
+        collectionPoint: order.collectionPointId?.address || order.collectionPointId?.name || "Unknown Point",
         phoneNumber: order.buyerId?.phone || "-",
         paymentMethod: order.paymentMethod || paymentMethod,
       };
@@ -69,7 +69,7 @@ export const getMyOrders = async (req, res) => {
 
 export const createOrder = async (req, res) => {
   let userId = req.user.id;
-  const { listingId, itemName, image, quantity, totalPrice, depositAmount, collectionPoint } = req.body;
+  const { listingId, itemName, image, quantity, totalPrice, depositAmount, collectionPoint, district, state } = req.body;
 
   // Handle demo string ID
   if (!mongoose.Types.ObjectId.isValid(userId)) {
@@ -104,12 +104,27 @@ export const createOrder = async (req, res) => {
         estimatedPriceMin: 0,
         estimatedPriceMax: 100,
         deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 1 week
-        status: "active"
+        status: "active",
+        state: state || "Selangor",
+        district: district || "Serdang"
       });
+    } else {
+      // update state and district if missing
+      if(!listing.state || !listing.district) {
+          listing.state = state || "Selangor";
+          listing.district = district || "Serdang";
+          await listing.save();
+      }
     }
     realListingId = listing._id;
   } else {
     realListingId = new mongoose.Types.ObjectId(listingId);
+    let listing = await Listing.findById(realListingId);
+    if (listing && (!listing.state || !listing.district) && (state || district)) {
+      listing.state = state || "Selangor";
+      listing.district = district || "Serdang";
+      await listing.save();
+    }
   }
 
   // Handle String collection point name mapping to ObjectId
@@ -117,8 +132,11 @@ export const createOrder = async (req, res) => {
   if (!cp) {
     cp = await CollectionPoint.create({
       name: collectionPoint || "Default Hub",
-      address: "No Address Provided"
+      address: [district, state].filter(Boolean).join(", ") || "No Address Provided"
     });
+  } else if (!cp.address || cp.address === "No Address Provided") {
+    cp.address = [district, state].filter(Boolean).join(", ") || cp.address;
+    await cp.save();
   }
   realCollectionPointId = cp._id;
 
