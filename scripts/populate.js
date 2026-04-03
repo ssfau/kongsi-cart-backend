@@ -115,7 +115,7 @@ async function main() {
   const toInsert = [];
   for (const [state, districts] of Object.entries(MALAYSIA_STATE_DISTRICTS)) {
     for (const district of districts) {
-      const n = randInt(0, 5);
+      const n = randInt(0, 2);
       for (let i = 0; i < n; i += 1) {
         toInsert.push(
           buildRandomListing({
