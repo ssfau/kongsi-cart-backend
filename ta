@@ -1,0 +1,164 @@
+[33mcommit d4cb756edb1fca1b2dbf396e2aee5531eac9c376[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;31mkongsi-cart-backend/main[m[33m, [m[1;31mkongsi-cart-backend/HEAD[m[33m)[m
+Author: ssfau <farhanammar101@gmail.com>
+Date:   Sat Apr 4 00:28:06 2026 +0800
+
+    populator logic script added
+
+[33mcommit bfd56e9a027676fa39655a7ceceefdce4ec79b89[m
+Merge: 4c832bc 96d7617
+Author: Nabil Hazmi Nasir <nhazmi135@gmail.com>
+Date:   Fri Apr 3 23:45:55 2026 +0800
+
+    Merge pull request #7 from ssfau/functional-demand-progress
+    
+    progress bar is now dynamic
+
+[33mcommit 96d76170473872a2a377cbbb91b1bed912b54960[m
+Author: Nabil Hazmi Nasir <nhazmi135@gmail.com>
+Date:   Fri Apr 3 23:42:12 2026 +0800
+
+    progress bar is now dynamic
+
+[33mcommit 4c832bc5315901a8047a93513cd5b8a7d20d15ad[m
+Author: Nabil Hazmi Nasir <nhazmi135@gmail.com>
+Date:   Fri Apr 3 15:54:56 2026 +0800
+
+    fix listing location
+
+[33mcommit 4f1d26b1e317a6ac01d9c6cabf6ea9bdcd3c5afb[m[33m ([m[1;31mkongsi-cart-backend/fix-order-location[m[33m, [m[1;31mkongsi-cart-backend/fix-auth-header[m[33m)[m
+Merge: 4e31dbc df2f33f
+Author: Nabil Hazmi Nasir <nhazmi135@gmail.com>
+Date:   Fri Apr 3 01:47:08 2026 +0800
+
+    Merge pull request #6 from ssfau/fix-seller-login
+    
+    seller login page is working now
+
+[33mcommit df2f33f72ba2c79c2cf0edcbc83e7f747745a784[m
+Author: Nabil Hazmi Nasir <nhazmi135@gmail.com>
+Date:   Fri Apr 3 01:46:09 2026 +0800
+
+    seller login page is working now
+
+[33mcommit 4e31dbc774cb4c77db05a9f4fc305e9c3b89ec50[m
+Author: ssfau <farhanammar101@gmail.com>
+Date:   Thu Apr 2 21:26:44 2026 +0800
+
+    vercel upd 3
+
+[33mcommit 71e0d6004e4445199c9ef3e61cb1e2b555278d6b[m
+Author: ssfau <farhanammar101@gmail.com>
+Date:   Thu Apr 2 21:17:59 2026 +0800
+
+    vercel setup v2
+
+[33mcommit 5a84cfabf92fc952894b7635c7019d0fd8206397[m[33m ([m[1;32m5a84cfabf92fc952894b7635c7019d0fd8206397[m[33m)[m
+Author: ssfau <farhanammar101@gmail.com>
+Date:   Thu Apr 2 04:57:22 2026 +0800
+
+    isp unrestrict
+
+[33mcommit af948913351faf0476e555c597985c79bf1122d0[m
+Author: Nabil Hazmi Nasir <nhazmi135@gmail.com>
+Date:   Thu Apr 2 01:27:55 2026 +0800
+
+    small issue
+
+[33mcommit 71b0558c64234d669abb66ba6c457838ae30717b[m
+Merge: 09ccdb7 d1152c0
+Author: Nabil Hazmi Nasir <nhazmi135@gmail.com>
+Date:   Thu Apr 2 01:04:20 2026 +0800
+
+    Merge pull request #5 from ssfau/card-product-details
+    
+    major issue fix
+
+[33mcommit d1152c0182c40f4cd679a1313576875389d819f2[m
+Author: Nabil Hazmi Nasir <nhazmi135@gmail.com>
+Date:   Thu Apr 2 01:02:28 2026 +0800
+
+    major issue fix
+
+[33mcommit 09ccdb740ca53ddeb2fc71df31352088875f1564[m
+Merge: 8f7ac6e 200118f
+Author: Nabil Hazmi Nasir <nhazmi135@gmail.com>
+Date:   Wed Apr 1 08:14:47 2026 +0800
+
+    Merge pull request #4 from ssfau/seller-user-flow-feature
+    
+    most user flow and database insertion done, may need a litte tweak he…
+
+[33mcommit 200118f0b37c174b10642f7bdb42f66e9a755fab[m
+Author: Nabil Hazmi Nasir <nhazmi135@gmail.com>
+Date:   Wed Apr 1 08:13:47 2026 +0800
+
+    most user flow and database insertion done, may need a litte tweak here and there also
+
+[33mcommit 8f7ac6ee6fbbc922fb8d597cb685bd9f89ae5675[m
+Merge: 09057b0 f84e19e
+Author: Nabil Hazmi Nasir <nhazmi135@gmail.com>
+Date:   Mon Mar 30 01:50:42 2026 +0800
+
+    Merge pull request #3 from ssfau/seller-login-feature
+    
+    seller login feature works
+
+[33mcommit f84e19e84f8ff60a4c599cb36e73e6cdd4980722[m
+Author: Nabil Hazmi Nasir <nhazmi135@gmail.com>
+Date:   Mon Mar 30 01:48:22 2026 +0800
+
+    seller login feature works
+
+[33mcommit 09057b0fb6c012a5beeacb0b5fb063293d2e111c[m
+Merge: c267fe8 288a5e4
+Author: Nabil Hazmi Nasir <nhazmi135@gmail.com>
+Date:   Sun Mar 29 00:10:46 2026 +0800
+
+    Merge pull request #2 from ssfau/login-feature
+    
+    working login feature
+
+[33mcommit 288a5e4156e94a9ffd526ee817799f3c54b97d6b[m
+Author: Nabil Hazmi Nasir <nhazmi135@gmail.com>
+Date:   Sun Mar 29 00:08:54 2026 +0800
+
+    working login feature
+
+[33mcommit c267fe87c997fc735a4e0ca551be6769ec808ac8[m
+Merge: 0af367b e43772e
+Author: Nabil Hazmi Nasir <nhazmi135@gmail.com>
+Date:   Sat Mar 28 23:17:12 2026 +0800
+
+    Merge pull request #1 from ssfau/register-feature
+    
+    user registration functional - linked to database
+
+[33mcommit e43772e5e688b75849444cad155cc921fa75c383[m
+Author: Nabil Hazmi Nasir <nhazmi135@gmail.com>
+Date:   Sat Mar 28 23:14:03 2026 +0800
+
+    user registration functional - linked to database
+
+[33mcommit 0af367b90404b6e3aa882f5376a99c393fcc40a0[m
+Author: Nabil Hazmi Nasir <nhazmi135@gmail.com>
+Date:   Sat Mar 28 00:41:56 2026 +0800
+
+    commonjs -> esmodule
+
+[33mcommit 8423cd6fe0d0c7cf5f0623d4c2b7e142163333c2[m
+Author: ssfau <farhanammar101@gmail.com>
+Date:   Fri Mar 27 21:21:58 2026 +0800
+
+    schema works
+
+[33mcommit 86230d8bc988a9d415133e3b5a75bf002c4878eb[m[33m ([m[1;31mkongsi-cart-backend/routing-changes-1[m[33m)[m
+Author: ssfau <farhanammar101@gmail.com>
+Date:   Fri Mar 27 17:34:49 2026 +0800
+
+    configured middleware and routes
+
+[33mcommit 82bcc5d3c9b8c7a12627c0e1734fdf6ee0bde230[m
+Author: ssfau <farhanammar101@gmail.com>
+Date:   Thu Mar 26 13:02:28 2026 +0800
+
+    setup init
