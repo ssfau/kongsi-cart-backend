@@ -14,6 +14,9 @@
  *   Fill LISTING_NAME_CATEGORY_PAIRS so each row keeps name + category in sync.
  */
 
+import dns from 'dns';
+dns.setServers(['8.8.8.8', '8.8.4.4']); // Fix for ISP DNS blocking MongoDB SRV lookups
+
 import 'dotenv/config';
 import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
