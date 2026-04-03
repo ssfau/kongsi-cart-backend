@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { demoAuth, roleGuard } from "../auth.middleware.js";
 import { catchAsync } from "../utils.js";
-import { createListing, getMyListings, deleteListing } from "../controllers/handler.controller.js";
+import { createListing, getMyListings, deleteListing, getDemandAnalytics } from "../controllers/handler.controller.js";
 
 const router = Router();
 
@@ -11,6 +11,7 @@ const isHandler = [demoAuth, roleGuard("handler")];
 
 /// 5.2 LISTINGS
 router.get("/my-listings", isHandler, catchAsync(getMyListings));
+router.get("/demand-analytics", isHandler, catchAsync(getDemandAnalytics));
 
 router.route("/listings")
   //// post new listing
