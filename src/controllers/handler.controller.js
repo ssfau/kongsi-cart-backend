@@ -1,4 +1,4 @@
-import { Listing, User } from "../models.js";
+import { Listing, User, Order } from "../models.js";
 import mongoose from "mongoose";
 
 export const createListing = async (req, res) => {
@@ -85,7 +85,18 @@ export const getMyListings = async (req, res) => {
       .populate('supplierId', 'name')
       .lean();
 
+    const pooledQuantities = await Order.aggregate([
+      { $match: { status: { $ne: 'cancelled' } } },
+      { $group: { _id: '$listingId', totalQuantity: { $sum: '$quantity' } } }
+    ]);
+    
+    const quantityMap = {};
+    pooledQuantities.forEach(pq => {
+      quantityMap[pq._id.toString()] = pq.totalQuantity;
+    });
+
     const formattedListings = listings.map(l => {
+      l.currentDemand = quantityMap[l._id.toString()] || 0;
       if (l.supplierId && l.supplierId.name) {
         l.companyName = l.supplierId.name;
       }
