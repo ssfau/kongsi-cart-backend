@@ -1,18 +1,3 @@
-/**
- * One-off dev/demo database populator.
- *
- * Runs ONLY when you execute: `npm run populate`
- * It does not run when the server starts.
- *
- * Requirements:
- * - MONGO_URI in .env (or environment)
- *
- * Notes:
- * - Uses a single handler account as the supplier for all seeded listings.
- * - Creates 0–5 random listings per district (Malaysia state/district map).
- * - Rows come from `src/constants/listing-options.js`: itemName, category, optional group.
- */
-
 import dns from 'dns';
 dns.setServers(['8.8.8.8', '8.8.4.4']); // Fix for ISP DNS blocking MongoDB SRV lookups
 
@@ -39,27 +24,48 @@ function randInt(minInclusive, maxInclusive) {
   return Math.floor(Math.random() * (maxInclusive - minInclusive + 1)) + minInclusive;
 }
 
-function pickOne(arr, fallback) {
-  if (Array.isArray(arr) && arr.length > 0) {
-    return arr[randInt(0, arr.length - 1)];
-  }
-  return fallback;
+/**
+ * Robust pickOne:
+ * - Skips undefined / null / empty slots
+ * - Always returns a valid row if array has valid elements
+ */
+function pickOne(arr, fallback = null) {
+  if (!Array.isArray(arr) || arr.length === 0) return fallback;
+
+  const validRows = arr.filter((r) => r && r.itemName && (r.category || r.name));
+  if (validRows.length === 0) return fallback;
+
+  return validRows[randInt(0, validRows.length - 1)];
 }
 
-/** Picks one row { itemName, category, group? }; name/category/group stay aligned when group is set in the table. */
+/**
+ * Picks one row { itemName, category, group? }
+ * - Guarantees itemName and category are present
+ */
 function pickNameCategoryPair(district) {
-  const row = pickOne(LISTING_NAME_CATEGORY_PAIRS, null);
-  if (row && row.itemName != null && row.category != null) {
-    const base = { itemName: String(row.itemName), category: String(row.category) };
-    if (row.group != null && String(row.group).trim() !== '') {
-      base.group = String(row.group).trim();
-    }
-    return base;
+  const row = pickOne(LISTING_NAME_CATEGORY_PAIRS);
+
+  if (!row) {
+    console.warn(`⚠️ No valid row found for district "${district}". Using fallback.`);
+    return { itemName: `Sample Item (${district})`, category: 'Other' };
   }
-  return { itemName: `Sample Item (${district})`, category: 'Other' };
+
+  const itemName = String(row.itemName).trim();
+  const category = String(row.category ?? row.name).trim();
+
+  if (!itemName || !category) {
+    console.warn('⚠️ BAD ROW DETECTED:', row);
+    return { itemName: `Sample Item (${district})`, category: 'Other' };
+  }
+
+  const base = { itemName, category };
+
+  if (row.group && String(row.group).trim() !== '') {
+    base.group = String(row.group).trim();
+  }
+
+  return base;
 }
-
-
 
 async function ensureUser({ name, email, role, passwordHash }) {
   const existing = await User.findOne({ email });
@@ -109,13 +115,10 @@ async function main() {
 
   const companyName = handler.name;
 
-  // Generate 0–5 listings per district.
-  // This is intentionally NOT idempotent — rerunning will add more listings.
-  // If you want idempotency later, we can add a `seedTag` field or a cleanup mode.
   const toInsert = [];
   for (const [state, districts] of Object.entries(MALAYSIA_STATE_DISTRICTS)) {
     for (const district of districts) {
-      const n = randInt(0, 2);
+      const n = randInt(0, 2); // 0–2 listings per district
       for (let i = 0; i < n; i += 1) {
         toInsert.push(
           buildRandomListing({
@@ -146,4 +149,3 @@ main().catch((err) => {
   console.error(err);
   process.exit(1);
 });
-

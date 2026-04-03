@@ -16,8 +16,7 @@
  *   { itemName: "Jasmine Rice 10kg", category: "rice", group: "pantry staples" },
  */
 export const LISTING_NAME_CATEGORY_PAIRS = [
-  [
-    { "itemName": "Cameron Highland Spinach", "group": "Leafy Greens", "category": "Spinach" },
+  { "itemName": "Cameron Highland Spinach", "group": "Leafy Greens", "category": "Spinach" },
     { "itemName": "Baby Spinach", "group": "Leafy Greens", "category": "Spinach" },
     { "itemName": "Local Round Cabbage", "group": "Leafy Greens", "category": "Cabbage" },
     { "itemName": "Chinese Napa Cabbage", "group": "Leafy Greens", "category": "Cabbage" },
@@ -86,7 +85,6 @@ export const LISTING_NAME_CATEGORY_PAIRS = [
     { "itemName": "Boxed Coconut Milk", "group": "Pantry Staples", "category": "Santan" },
     { "itemName": "Instant Noodles", "group": "Pantry Staples", "category": "Mee" },
     { "itemName": "Rice Vermicelli (Bihun)", "group": "Pantry Staples", "category": "Mee" }
-  ]
 ];
 
 export const MALAYSIA_STATE_DISTRICTS = {
