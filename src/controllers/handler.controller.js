@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 export const createListing = async (req, res) => {
     try {
     let userId = req.user?.id;
-    const { category, itemName, unit, estimatedQty, depositPerUnit, estimatedPriceMin, estimatedPriceMax, deadline } = req.body;
+    const { category, itemName, unit, estimatedQty, depositPerUnit, estimatedPriceMin, estimatedPriceMax, deadline, group } = req.body;
 
     if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
       // Auto-fallback for demo purposes
@@ -36,6 +36,7 @@ export const createListing = async (req, res) => {
       supplierId: userId,
       category,
       itemName,
+      ...(group != null && String(group).trim() !== '' ? { group: String(group).trim() } : {}),
       companyName: generatedCompanyName,
       unit,
       estimatedQty: Number(estimatedQty),

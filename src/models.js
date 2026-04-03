@@ -14,7 +14,8 @@ const userSchema = new Schema({
 const listingSchema = new Schema({
   supplierId:        { type: Schema.Types.ObjectId, ref: 'User', required: true },
   itemName:          { type: String, required: true, trim: true },
-  category:          { type: String, required: true }, // NEW: Link to 20 categories
+  category:          { type: String, required: true }, // finer label (e.g. product type)
+  group:             { type: String, trim: true }, // broader bucket (e.g. "leafy greens") — optional for legacy rows
   companyName:       { type: String, required: true, default: 'Independent Seller' }, // NEW: Displayed to consumers
   description:       { type: String },
   unit:              { type: String, enum: ['kg', 'unit'], required: true },

@@ -10,8 +10,7 @@
  * Notes:
  * - Uses a single handler account as the supplier for all seeded listings.
  * - Creates 0–5 random listings per district (Malaysia state/district map).
- * - Item name + category pairs come from `src/constants/listing-options.js` (empty by default).
- *   Fill LISTING_NAME_CATEGORY_PAIRS so each row keeps name + category in sync.
+ * - Rows come from `src/constants/listing-options.js`: itemName, category, optional group.
  */
 
 import dns from 'dns';
@@ -47,11 +46,15 @@ function pickOne(arr, fallback) {
   return fallback;
 }
 
-/** Picks one { itemName, category } row; never mixes unrelated name/category. */
+/** Picks one row { itemName, category, group? }; name/category/group stay aligned when group is set in the table. */
 function pickNameCategoryPair(district) {
   const row = pickOne(LISTING_NAME_CATEGORY_PAIRS, null);
   if (row && row.itemName != null && row.category != null) {
-    return { itemName: String(row.itemName), category: String(row.category) };
+    const base = { itemName: String(row.itemName), category: String(row.category) };
+    if (row.group != null && String(row.group).trim() !== '') {
+      base.group = String(row.group).trim();
+    }
+    return base;
   }
   return { itemName: `Sample Item (${district})`, category: 'Other' };
 }
@@ -65,7 +68,7 @@ async function ensureUser({ name, email, role, passwordHash }) {
 }
 
 function buildRandomListing({ supplierId, companyName, state, district }) {
-  const { itemName, category } = pickNameCategoryPair(district);
+  const { itemName, category, group } = pickNameCategoryPair(district);
   const unit = Math.random() < 0.7 ? 'kg' : 'unit';
 
   const estimatedQty = randInt(10, 200);
@@ -78,6 +81,7 @@ function buildRandomListing({ supplierId, companyName, state, district }) {
     supplierId,
     category,
     itemName,
+    ...(group ? { group } : {}),
     companyName,
     unit,
     estimatedQty,

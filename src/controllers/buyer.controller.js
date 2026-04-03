@@ -95,6 +95,7 @@ export const createOrder = async (req, res) => {
       listing = await Listing.create({
         supplierId: userId, // fallback supplier
         category: "Other", // fallback category
+        group: req.body.group != null && String(req.body.group).trim() !== '' ? String(req.body.group).trim() : undefined,
         companyName: "Dummy Company", // fallback company
         itemName: itemName || "Dummy Item",
         imageUrl: image || "📦",
