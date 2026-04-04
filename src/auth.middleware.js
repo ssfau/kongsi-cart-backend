@@ -6,8 +6,6 @@ const demoAuth = (req, res, next) => {
   const role = req.headers['x-demo-role'];
   const userId = req.headers['x-demo-userid'];
 
-  console.log("demoAuth called:", { role, userId, url: req.url });
-
   if (!role || !userId) {
     return next(new AppError('Missing demo auth headers', 401));
   }

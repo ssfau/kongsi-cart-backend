@@ -84,6 +84,8 @@ router.get("/orders", demoAuth, (req, res) => {
   res.status(501).json({ error: "Not Implemented" });
 });
 
+import { getPaymentHistory } from "../controllers/shared.controller.js";
+
 // get specific order
 router.get("/orders/:id", demoAuth, (req, res) => {
   const orderId = req.params.id;
@@ -94,8 +96,6 @@ router.get("/orders/:id", demoAuth, (req, res) => {
 /// 5.7 PAYMENT
 
 // get payment history
-router.get("/payments", demoAuth, (req, res) => {
-  res.status(501).json({ error: "Not Implemented" });
-});
+router.get("/payments", demoAuth, getPaymentHistory);
 
 export default router;
