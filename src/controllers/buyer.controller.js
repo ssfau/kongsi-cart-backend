@@ -27,9 +27,12 @@ export const getMyOrders = async (req, res) => {
     .populate('buyerId', 'phone')
     .lean();
 
+  // Filter out orphaned orders immediately so they don't appear as "Unknown Item"
+  const validOrders = orders.filter(o => o.listingId != null);
+
   // Fetch related payments and transform response
   const transformedOrders = await Promise.all(
-    orders.map(async (order) => {
+    validOrders.map(async (order) => {
       // Fetch payments using orderId
       const payments = await Payment.find({ orderId: order._id }).lean();
 
