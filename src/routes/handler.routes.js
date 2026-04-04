@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { demoAuth, roleGuard } from "../auth.middleware.js";
 import { catchAsync } from "../utils.js";
-import { createListing, getMyListings, deleteListing, getDemandAnalytics } from "../controllers/handler.controller.js";
+import { createListing, getMyListings, deleteListing, getDemandAnalytics, getDispatchData, shipListing } from "../controllers/handler.controller.js";
 
 const router = Router();
 
@@ -11,11 +11,18 @@ const isHandler = [demoAuth, roleGuard("handler")];
 
 /// 5.2 LISTINGS
 router.get("/my-listings", isHandler, catchAsync(getMyListings));
-router.get("/demand-analytics", isHandler, catchAsync(getDemandAnalytics));
+router.get("/demand-analytics", isHandler, catchAsync(getDemandAnalytics));     
+router.get("/dispatch", isHandler, catchAsync(getDispatchData));
 
 router.route("/listings")
   //// post new listing
   .post(isHandler, catchAsync(createListing));
+
+router.route("/listings/:id/ship")
+  .post(isHandler, catchAsync(shipListing));
+
+router.route("/listings/:id/cancel")
+  .post(isHandler, catchAsync(deleteListing)); // Using deleteListing for cancel too or create a new one
 
 router.route("/listings/:id")
   //// patch specific listing
@@ -27,8 +34,7 @@ router.route("/listings/:id")
   //// delete specific listing
   .delete(isHandler, catchAsync(deleteListing));
 
-
-/// 5.3 COLLECTION POINTS
+router.post("/listings/:id/ship", isHandler, catchAsync(shipListing));
 router.route("/collection-points")
   //// create new collection point
   .post(isHandler, (req, res) => {

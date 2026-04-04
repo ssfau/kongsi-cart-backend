@@ -1,4 +1,4 @@
-import { Listing, User, Order } from "../models.js";
+import { Listing, User, Order, Shipment, CollectionPoint } from "../models.js";
 import mongoose from "mongoose";
 
 export const createListing = async (req, res) => {
@@ -234,6 +234,108 @@ export const getDemandAnalytics = async (req, res) => {
     res.status(200).json({ status: 'success', data: finalPoints });
   } catch (error) {
     console.error('Error fetching demand analytics:', error);
+    res.status(500).json({ status: 'error', error: error.message });
+  }
+};
+
+export const getDispatchData = async (req, res) => {
+  try {
+    const userId = req.user?._id || req.user?.id;
+    const isHandlerIdValid = userId && mongoose.Types.ObjectId.isValid(userId);
+    
+    // Fallback logic as used in other handler routes for demo
+    let sellerId = userId;
+    if (!isHandlerIdValid) {
+      const fallbackSeller = await User.findOne({ role: 'handler' });
+      if (fallbackSeller) sellerId = fallbackSeller._id;
+      else return res.status(401).json({ status: 'error', error: 'Unauthorized' });
+    }
+
+    // Get all active listings
+    const listings = await Listing.find({ supplierId: sellerId, status: 'active' })
+      .populate('collectionPoints')
+      .lean();
+
+    const dispatchListings = await Promise.all(
+      listings.map(async (listing) => {
+        // Aggregate orders by collection point
+        const orders = await Order.find({
+          listingId: listing._id,
+          status: { $nin: ['cancelled'] },
+        })
+          .populate('collectionPointId')
+          .lean();
+
+        let totalDemand = 0;
+        const cpMap = {};
+
+        for (const order of orders) {
+          totalDemand += order.quantity;
+          const cpIdStr = order.collectionPointId?._id?.toString() || order.collectionPointId;
+          const cpName = order.collectionPointId?.name || "Main Hub";
+
+          if (!cpMap[cpIdStr]) {
+            cpMap[cpIdStr] = { name: cpName, qty: 0, buyers: new Set() };
+          }
+          cpMap[cpIdStr].qty += order.quantity;
+          cpMap[cpIdStr].buyers.add(order.buyerId.toString());
+        }
+
+        const collectionPointsStats = Object.values(cpMap).map((cp) => ({
+          name: cp.name,
+          qty: cp.qty,
+          buyers: cp.buyers.size,
+        }));
+
+        let status = 'ready';
+        if (totalDemand < listing.estimatedQty * 0.3) status = 'low_yield';
+        else if (totalDemand < listing.estimatedQty) status = 'warning';
+
+        return {
+          id: listing._id.toString(),
+          itemName: listing.itemName,
+          unit: listing.unit,
+          supply: listing.estimatedQty,
+          demand: totalDemand,
+          deadline: listing.deadline,
+          status,
+          collectionPoints: collectionPointsStats,
+        };
+      })
+    );
+
+    res.status(200).json({ status: 'success', data: dispatchListings });
+  } catch (error) {
+    console.error('Error fetching dispatch data:', error);
+    res.status(500).json({ status: 'error', error: error.message });
+  }
+};
+
+export const shipListing = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { finalPrices } = req.body; // Array of {collectionPoint: string, finalPricePerUnit: number}
+
+    const listing = await Listing.findById(id);
+    if (!listing) return res.status(404).json({ status: 'error', error: 'Listing not found' });
+
+    // Mark listing as shipped
+    listing.status = 'shipped';
+    await listing.save();
+
+    // Mark orders as ready_to_collect if we want or create shipments
+    const orders = await Order.find({ listingId: id, status: 'confirmed' });
+    for (const order of orders) {
+      order.status = 'ready_to_collect';
+      // Ideally map finalPrice from finalPrices payload
+      order.finalPricePerUnit = finalPrices?.[0]?.finalPricePerUnit || listing.estimatedPriceMax;
+      order.remainingAmount = (order.finalPricePerUnit * order.quantity) - order.depositAmount;
+      await order.save();
+    }
+
+    res.status(200).json({ status: 'success', message: 'Shipped successfully' });
+  } catch (error) {
+    console.error('Error shipping listing:', error);
     res.status(500).json({ status: 'error', error: error.message });
   }
 };
